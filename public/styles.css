@@ -1,0 +1,82 @@
+@font-face {
+    font-family: Avalon;
+    src: url("./assets/fonts/Avalon.ttf");
+}
+
+@font-face {
+    font-family: Avalon;
+    src: url("./assets/fonts/AvalonBold.ttf");
+    font-weight: bold;
+}
+
+body {
+    background-image: url('./assets/images/background.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 100vh;
+}
+
+.row:first-child {
+    display: flex;
+}
+
+.center {
+    margin: 0 auto;
+}
+
+.referral-toolbar {
+    padding: 0 1rem;
+    font-weight: bold;
+    width: 100%;
+}
+
+.referral-toolbar a {
+    font-size: small;
+    font-family: Avalon;
+    font-weight: bold;
+}
+
+.card-title {
+    font-family: Avalon;
+    font-weight: bold;
+    text-align: center;
+}
+
+.btn {
+    width: 80%;
+}
+
+.progress {
+    display: none;
+}
+
+.referral-footer{
+    position: fixed;
+    bottom: 0;
+    text-align: center;
+    padding: 5px;
+    width: 100%;
+}
+
+.referral-footer img {
+    width: 36px;
+    height: 36px;
+    vertical-align: bottom;
+}
+
+@media (min-width: 1024px) {
+    .referral-toolbar a {
+        font-size: medium;
+    }
+}
+
+@media (min-width: 1367px) {
+    body {
+        background-size: 100% 100%;
+    }
+
+    .referral-toolbar a {
+        font-size: xx-large;
+    }
+}
