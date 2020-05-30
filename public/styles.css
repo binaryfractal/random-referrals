@@ -69,6 +69,10 @@ footer {
     vertical-align: bottom;
 }
 
+ol, #description{
+    text-align: left;
+}
+
 @media (min-width: 1024px) {
     .referral-toolbar a {
         font-size: medium;
