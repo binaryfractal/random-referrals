@@ -1,10 +1,12 @@
 url = "https://{URL_API}";
 
 configStorage = {
-    platform: 'XXXXXX', // Save last date where registred code
-    lastDayGenerated: 'XXXXXX', // Save last date where the code was generated
-    totalGenerated: 'XXXXXX' // Total code generated
+    platform: 'XXXXX', // Save last date where registred code
+    lastDayGenerated: 'XXXXX', // Save last date where the code was generated
+    totalGenerated: 'XXXXX' // Total code generated
 };
+
+MAX_GENERATED_CODE = 10;
 
 document.addEventListener('DOMContentLoaded', function() {
     var elems = document.querySelectorAll('select');
@@ -99,7 +101,7 @@ async function validateGenerator() {
             total = parseInt(totalGeneratedStorage);
         } 
 
-        if(total < 2) {
+        if(total < MAX_GENERATED_CODE) {
             return true;
         } else {
             if(lastDayStorage !== new Date().getDay().toString()) {
