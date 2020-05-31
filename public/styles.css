@@ -69,8 +69,12 @@ footer {
     vertical-align: bottom;
 }
 
-ol, #description{
+ol, .description{
     text-align: left;
+}
+
+.referral-underline-text {
+    text-decoration-line: underline;
 }
 
 @media (min-width: 1024px) {
