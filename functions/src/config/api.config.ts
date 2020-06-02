@@ -1,4 +1,4 @@
-import * as functions from "firebase-functions";
+//import * as functions from "firebase-functions";
 import * as bodyParser from "body-parser";
 
 import express from "express";
@@ -7,6 +7,7 @@ import cors from "cors";
 const app = express();
 const server = express();
 
+/*
 const whitelist: Array<string> = [
   functions.config().hosting.url_1,
   functions.config().hosting.url_2,
@@ -24,10 +25,12 @@ const corsOptionsDelegate = function (req: any, callback: any) {
 };
 
 const corsHandler = cors(corsOptionsDelegate);
+*/
+const corsHandler = cors({ origin: true });
 
-server.use("/api", app);
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: false }));
 server.use(corsHandler);
+server.use("/api", app);
 
 export { app, server };
