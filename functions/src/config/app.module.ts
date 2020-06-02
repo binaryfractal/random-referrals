@@ -14,7 +14,7 @@ import cors from "cors";
 export class AppModule {
   async configure(consumer: MiddlewareConsumer): Promise<void> {
     const whitelist: Array<string> = [
-      functions.config().hosting.url_1,
+      functions.config().hosting.url_4,
       functions.config().hosting.url_2,
       functions.config().hosting.url_3,
     ];
