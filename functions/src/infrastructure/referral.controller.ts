@@ -1,10 +1,8 @@
-import { Response } from "express";
-import { Controller, Get, Param, Res, HttpStatus, Post } from "@nestjs/common";
+import { Request, Response } from "express";
 import { GetRandomCode } from "../application/usecases/get-random-code.usecase";
 import { ReferralService } from "./referral.service";
 import { SaveCode } from "../application/usecases/save-code.usecase";
 
-@Controller("/")
 export class ReferralController {
   private readonly getRandomCodeUsecase: GetRandomCode<ReferralService>;
   private readonly saveCodeUsecase: SaveCode<ReferralService>;
@@ -14,34 +12,25 @@ export class ReferralController {
     this.saveCodeUsecase = new SaveCode(new ReferralService());
   }
 
-  @Get(":company")
-  async getRandomCode(
-    @Param("company") company: string,
-    @Res() res: Response
-  ): Promise<void> {
+  async getRandomCode(req: Request, res: Response): Promise<void> {
     try {
-      const code: string = await this.getRandomCodeUsecase.get(company);
-      res.status(HttpStatus.OK).send(code);
+      const code: string = await this.getRandomCodeUsecase.get(
+        req.params.company
+      );
+      res.status(200).send(code);
     } catch (error) {
-      res
-        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .send({ message: error.message });
+      res.status(500).send({ message: error.message });
     }
   }
 
-  @Post(":company/:code")
-  async saveCode(
-    @Param("company") company: string,
-    @Param("code") code: string,
-    @Res() res: Response
-  ) {
+  async saveCode(req: Request, res: Response) {
     try {
-      await this.saveCodeUsecase.save(company, code);
-      res.status(HttpStatus.CREATED).send(true);
+      await this.saveCodeUsecase.save(req.params.company, req.params.code);
+      res.status(201).send(true);
     } catch (error) {
-      res
-        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .send({ message: error.message });
+      res.status(500).send({ message: error.message });
     }
   }
 }
+
+export const referralController: ReferralController = new ReferralController();

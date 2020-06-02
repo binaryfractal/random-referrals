@@ -5,19 +5,12 @@
     "noUnusedLocals": true,
     "outDir": "lib",
     "sourceMap": true,
-    "strict": false,
+    "strict": true,
     "target": "es2017",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "declaration": true,
-    "removeComments": true,
-    "baseUrl": "src",
-    "incremental": true,
-    "esModuleInterop": true,
-    "moduleResolution": "node"
+    "esModuleInterop": true
   },
-  "compileOnSave": false,
+  "compileOnSave": true,
   "include": [
-    "src/**/*"
+    "src"
   ]
 }

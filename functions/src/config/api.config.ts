@@ -1,21 +1,33 @@
-import { AppModule } from "./app.module";
-import { ExpressAdapter } from "@nestjs/platform-express";
-import { NestFactory } from "@nestjs/core";
-import express from "express";
+import * as functions from "firebase-functions";
+import * as bodyParser from "body-parser";
 
+import express from "express";
+import cors from "cors";
+
+const app = express();
 const server = express();
 
-const createNestServer = async (expressInstance) => {
-  const app = await NestFactory.create(
-    AppModule,
-    new ExpressAdapter(expressInstance)
-  );
+const whitelist: Array<string> = [
+  functions.config().hosting.url_1,
+  functions.config().hosting.url_2,
+  functions.config().hosting.url_3,
+];
 
-  return app.init();
+const corsOptionsDelegate = function (req: any, callback: any) {
+  var corsOptions;
+  if (whitelist.indexOf(req.header("Origin")) !== -1) {
+    corsOptions = { origin: true };
+  } else {
+    corsOptions = { origin: false };
+  }
+  callback(null, corsOptions);
 };
 
-createNestServer(server)
-  .then((v) => console.log("Nest Ready"))
-  .catch((err) => console.error("Nest broken", err));
+const corsHandler = cors(corsOptionsDelegate);
 
-export { server };
+server.use("/api", app);
+server.use(bodyParser.json());
+server.use(bodyParser.urlencoded({ extended: false }));
+server.use(corsHandler);
+
+export { app, server };

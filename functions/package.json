@@ -10,21 +10,17 @@
     "logs": "firebase functions:log"
   },
   "engines": {
-    "node": "10"
+    "node": "8"
   },
   "main": "lib/index.js",
   "dependencies": {
     "@google-cloud/firestore": "^3.7.1",
-    "@nestjs/common": "^7.0.5",
-    "@nestjs/core": "^7.0.5",
-    "@nestjs/platform-express": "^7.0.5",
+    "@types/cors": "^2.8.6",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "firebase-admin": "^8.10.0",
-    "firebase-functions": "^3.6.1",
-    "reflect-metadata": "^0.1.13",
-    "rxjs": "^6.5.4"
+    "firebase-functions": "^3.6.1"
   },
   "devDependencies": {
     "tslint": "^5.12.0",
