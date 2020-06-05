@@ -1,19 +1,19 @@
-//import * as functions from "firebase-functions";
+import * as functions from "firebase-functions";
 import * as bodyParser from "body-parser";
 
 import { Module, MiddlewareConsumer, RequestMethod } from "@nestjs/common";
 
 import { ApplicationModule } from "../application/application.module";
 import { InfrastructureModule } from "../infrastructure/infrastructure.module";
+import { DomainModule } from "../domain/domain.module";
 
 import cors from "cors";
 
 @Module({
-  imports: [ApplicationModule, InfrastructureModule],
+  imports: [DomainModule, ApplicationModule, InfrastructureModule],
 })
 export class AppModule {
   async configure(consumer: MiddlewareConsumer): Promise<void> {
-    /*
     const whitelist: Array<string> = [
       functions.config().hosting.url_4,
       functions.config().hosting.url_2,
@@ -29,9 +29,8 @@ export class AppModule {
       }
       callback(null, corsOptions);
     };
-    */
 
-    const corsHandler = cors({ origin: true });
+    const corsHandler = cors(corsOptionsDelegate);
     const urlEncodedParser = bodyParser.urlencoded({ extended: false });
 
     consumer

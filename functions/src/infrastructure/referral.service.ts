@@ -1,13 +1,16 @@
 import { GetRandomCodePort } from "../application/usecases/get-random-code.usecase";
 import { SaveCodePort } from "../application/usecases/save-code.usecase";
+import { GetMostGeneratedCodesPort } from "../application/usecases/get-most-generated-codes.usecase";
 import {
   DocumentSnapshot,
   WriteBatch,
   QuerySnapshot,
 } from "@google-cloud/firestore";
 import { db } from "../config/app.config";
+import { Code } from "../domain/models/code";
 
-export class ReferralService implements GetRandomCodePort, SaveCodePort {
+export class ReferralService
+  implements GetRandomCodePort, SaveCodePort, GetMostGeneratedCodesPort {
   async get(company: string): Promise<string> {
     const companySnapshot: DocumentSnapshot = await db
       .collection(company)
@@ -76,6 +79,29 @@ export class ReferralService implements GetRandomCodePort, SaveCodePort {
         }
       }
     }
+  }
+
+  async getAll(company: string, limit: number): Promise<Array<Code>> {
+    const codes: Array<Code> = new Array<Code>();
+    const querySnapshot: QuerySnapshot = await db
+      .collection(company)
+      .orderBy("count", "desc")
+      .limit(limit)
+      .get();
+
+    for (let snapshot of querySnapshot.docs) {
+      if (snapshot.exists) {
+        if (snapshot !== undefined) {
+          const code: Code = {} as Code;
+          code.code = snapshot.get("code");
+          code.count = snapshot.get("count");
+
+          codes.push(code);
+        }
+      }
+    }
+
+    return codes;
   }
 
   private async updateCounter(snapshot: DocumentSnapshot): Promise<void> {
