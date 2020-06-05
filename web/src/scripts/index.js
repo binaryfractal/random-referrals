@@ -1,15 +1,16 @@
 import { Config } from './config';
 import { InternalStorage } from './storage';
 
-import '../assets/images/background.jpg'
 import '../assets/images/binaryfractal.png'
 import '../assets/fonts/Avalon.ttf'
 import '../assets/fonts/AvalonBold.ttf'
 import '../styles.css';
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
     var elems = document.querySelectorAll('select');
     M.FormSelect.init(elems);
+
+    await getRanking();
 });
 
 const btnGenerator = document.querySelector("#btn_generator");
@@ -23,6 +24,19 @@ btnRegistrator.addEventListener('click', async function(event) {
     event.preventDefault(); 
     await registerCode();
 });
+
+const selectPlatform = document.querySelector('select');
+selectPlatform.addEventListener('change', async function(event) {
+    event.preventDefault();
+
+    const collection = document.querySelector(".collection");
+    collection.innerHTML = '';
+
+    const ranking = document.querySelector("#ranking");
+    ranking.style.display = 'none';
+
+    await getRanking();
+})
 
 async function getRandomCode() {
     document.querySelector('.progress-random-code').style.display = 'block';
@@ -38,6 +52,12 @@ async function getRandomCode() {
         );
 
         const result = await response.text();
+        if(!result) {
+            M.toast({html: `Todavía no hay códigos para ${platform}`, classes: 'red'});
+            document.querySelector('.progress-random-code').style.display = 'none';
+            return;
+        }
+            
         document.querySelector('#random_code').value = result; 
         document.querySelector('#random_code_hide').value = result;
         await storage.registerGenerator();
@@ -89,4 +109,26 @@ async function registerCode() {
     }
 
     document.querySelector('.progress-register-code').style.display = 'none';
+}
+
+async function getRanking() {
+    const platform = document.querySelector('select').value;
+    const response = await fetch(
+        `${Config.URL}/${platform}/ranking/10`, {
+            mode: 'cors',
+            method: 'GET'
+        }
+    );
+
+    const collection = document.querySelector(".collection");
+    const results = await response.json();
+
+    if(results.length > 0) {
+        const ranking = document.querySelector("#ranking");
+        ranking.style.display = 'block';
+
+        for(let result of results) {
+            collection.innerHTML += `<a href="#!" class="collection-item"><span class="badge blue white-text">${result.count}</span>${result.code}</a>`;
+        }
+    } 
 }
