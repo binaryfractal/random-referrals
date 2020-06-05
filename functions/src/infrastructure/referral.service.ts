@@ -32,6 +32,8 @@ export class ReferralService implements GetRandomCodePort, SaveCodePort {
             if (!active) {
               randomCode = await this.get(company);
             }
+
+            await this.updateCounter(randomCodeSnapshot);
           }
         }
       }
@@ -74,6 +76,21 @@ export class ReferralService implements GetRandomCodePort, SaveCodePort {
         }
       }
     }
+  }
+
+  private async updateCounter(snapshot: DocumentSnapshot): Promise<void> {
+    const batch = db.batch();
+
+    let currentCount: number = 0;
+    if (snapshot.get("count")) {
+      currentCount = snapshot.get("count");
+    }
+
+    batch.update(snapshot.ref, {
+      count: currentCount + 1,
+    });
+
+    await batch.commit();
   }
 
   private async getRandomId(min: number, max: number): Promise<number> {
